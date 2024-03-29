@@ -1,24 +1,29 @@
-# Fish scripts
+# Fish Shell Plugin for EASIFEM 
 
-In your fish config file add following line.
+This plugin contains some essential and useful fish files for developers.
+This repository is mainly based on and will be updated along with the 
+[easifem/config](https://github.com/easifem/config) repository. 
 
-First you need to set the environment variable for easifem configuration. See more at [website](https://www.easifem.com)
+## How to install 
 
-```bash
-set -q XDG_DATA_HOME
-and set -gx EASIFEM_CONFIG_PATH "$XDG_DATA_HOME/easifem"
-or set -gx EASIFEM_CONFIG_PATH "$HOME/.config/easifem"
+This plugin can be installed by [fisher](https://github.com/jorgebucaran/fisher) as follows 
+
+```sh 
+  fisher install easifem/easifem-fish-utility
 ```
 
-```bash
-if test -f $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
-    source $EASIFEM_CONFIG_PATH/scripts/easifem_functions.fish
-end
+For update 
+```sh 
+  fisher update easifem/easifem-fish-utility
 ```
 
-After that reload the fish.
+## Contents 
 
-## Fish functions 
+### Essential environmental variables for EASIFEM 
+
+Check [conf.d/easifem-fish-utility.fish](https://github.com/easifem/easifem-fish-utility/blob/main/conf.d/easifem-fish-utility.fish) 
+
+### Useful functions to work with EASIFEM 
 
 - edoc 
 - erun 
@@ -30,8 +35,11 @@ After that reload the fish.
 - evim
 - egreet
 - erebuild
+- ebuild 
+- einstall 
+- switch_easifem 
+- backup_easifem 
 
-
-## TODO 
+### TODO 
 
 Add details of usage of `fish` functions.

@@ -4,6 +4,7 @@ function erun -d "efficient easifem run"
     argparse \
         c/classes b/base \
         a/acoustic e/elasticity \
+        s/smartout \
         d/directory 'n/modname=' -- $argv
     or return 1
 
@@ -23,18 +24,23 @@ function erun -d "efficient easifem run"
         set eflag (echo -e $cands | fzf )
     end
 
-    echo $eflag
-
     if count $argv >/dev/null
-        easifem run -e $eflag -f $argv
+        set filename $argv
     else
         if set -ql _flag_directory
             set dirname (fd --type d | fzf )
-            easifem run -e $efrag -f (find $dirname  -name "*.[fF]*" -o -name "*.md" -type f | fzf )
+            set filename (find $dirname  -name "*.[fF]*" -o -name "*.md" -type f | fzf )
         else
-            easifem run -e $eflag -f (find . -name "*.[fF]*" -o -name "*.md" -type f | fzf )
+            set filename (find . -name "*.[fF]*" -o -name "*.md" -type f | fzf )
         end
     end
 
+    if set -ql _flag_smartout
+        easifem run -e $eflag -f $filename >tmp_erun
+        _easifem_output_reshape tmp_erun
+        rm -f tmp_erun
+    else
+        easifem run -e $eflag -f $filename
+    end
     builtin cd $currentPath
 end

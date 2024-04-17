@@ -4,6 +4,7 @@ function etest -d "efficient easifem test"
     argparse \
         c/classes b/base \
         a/acoustic e/elasticity \
+        o/onlyout \
         'n/modname=' -- $argv
     or return 1
 
@@ -23,13 +24,19 @@ function etest -d "efficient easifem test"
         set eflag (echo -e $cands | fzf )
     end
 
-    echo $eflag
+    # echo $eflag
 
     builtin cd $docs
     set -l test_dir $docs/(fd --type d | fzf)
     builtin cd $test_dir
-    easifem run -e $eflag -f (fd -I --type f -e md -e F90 -e f90  | fzf )
-    builtin cd $myloc
+
+    if set -ql _flag_onlyout
+        easifem run -e $eflag -f (fd -I --type f -e md -e F90 -e f90  | fzf ) >tmp_etest
+        _easifem_output_reshape tmp_etest
+        rm -f tmp_etest
+    else
+        easifem run -e $eflag -f (fd -I --type f -e md -e F90 -e f90  | fzf )
+    end
 
     builtin cd $currentPath
 end

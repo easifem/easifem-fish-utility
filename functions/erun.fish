@@ -26,6 +26,7 @@ function erun -d "efficient easifem run"
 
     if count $argv >/dev/null
         set filename $argv
+        set eflag (_get_easifem_flag $filename)
     else
         if set -ql _flag_directory
             set dirname (fd --type d | fzf )

@@ -1,3 +1,6 @@
+set -gx PATH $PATH $HOME/go/bin/
+set -gx PATH $PATH $HOME/.local/bin/
+
 if command -q easifem
     if which easifem | grep go >/dev/null
         if [ -f $HOME/.config/easifem/easifemvar.fish ]

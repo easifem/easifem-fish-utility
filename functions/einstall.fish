@@ -2,6 +2,11 @@
 function einstall -d "efficient install for easifem"
     set currentPath ( pwd )
 
+    if not set -q EASIFEM_PYTHON_CLI
+        easifem install $argv --no-download
+        return
+    end
+
     argparse d/debug -- $argv
 
     if set -ql _flag_debug

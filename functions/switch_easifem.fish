@@ -1,4 +1,3 @@
-
 function switch_easifem -d "switch easifem install directory to backuped one"
     set currentPath ( pwd )
     builtin cd $EASIFEM_INSTALL_DIR/easifem

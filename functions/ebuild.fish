@@ -2,6 +2,11 @@
 function ebuild -d "efficient build for easifem"
     set currentPath ( pwd )
 
+    if not set -q EASIFEM_PYTHON_CLI
+        easifem dev $argv
+        return
+    end
+
     argparse d/debug -- $argv
 
     if set -ql _flag_debug

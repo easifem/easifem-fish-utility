@@ -10,18 +10,20 @@ function erun -d "efficient easifem run"
 
     set -l cands "easifemBase\neasifemClasses\neasifemAcoustic\neasifemElasticity"
 
-    if set -ql _flag_acoustic
-        set eflag easifemAcoustic
-    else if set -ql _flag_elasticity
-        set eflag easifemElasticity
-    else if set -ql _flag_classes
-        set eflag easifemClasses
-    else if set -ql _flag_base
-        set eflag easifemBase
-    else if set -ql _flag_modname
-        set eflag $_flag_modname
-    else
-        set eflag (echo -e $cands | fzf )
+    if set -q EASIFEM_PYTHON_CLI
+        if set -ql _flag_acoustic
+            set eflag easifemAcoustic
+        else if set -ql _flag_elasticity
+            set eflag easifemElasticity
+        else if set -ql _flag_classes
+            set eflag easifemClasses
+        else if set -ql _flag_base
+            set eflag easifemBase
+        else if set -ql _flag_modname
+            set eflag $_flag_modname
+        else
+            set eflag (echo -e $cands | fzf )
+        end
     end
 
     if set -ql _flag_quiet
@@ -42,12 +44,16 @@ function erun -d "efficient easifem run"
         end
     end
 
-    if set -ql _flag_smartout
-        easifem $run -e $eflag -f $filename >tmp_erun
-        _easifem_output_reshape tmp_erun
-        rm -f tmp_erun
+    if set -q EASIFEM_PYTHON_CLI
+        if set -ql _flag_smartout
+            easifem $run -e $eflag -f $filename >tmp_erun
+            _easifem_output_reshape tmp_erun
+            rm -f tmp_erun
+        else
+            easifem $run -e $eflag -f $filename
+        end
     else
-        easifem $run -e $eflag -f $filename
+        easifem $run $filename
     end
     builtin cd $currentPath
 end

@@ -1,9 +1,14 @@
-
 function einstall -d "efficient install for easifem"
     set currentPath ( pwd )
 
     if not set -q EASIFEM_PYTHON_CLI
-        easifem install $argv --no-download
+        argparse d/download -- $argv
+        if set -ql _flag_download
+            easifem install $argv
+        else
+            # default is with no-download option
+            easifem install $argv --no-download
+        end
         return
     end
 

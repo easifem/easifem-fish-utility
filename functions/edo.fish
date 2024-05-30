@@ -1,5 +1,5 @@
 function edo -d "rerun the binary file made by easifem"
-    if set -ql EASIFEM_PYTHON_CLI
+    if set -q EASIFEM_PYTHON_CLI
         _edo_python $argv
     else
         _edo_go $argv

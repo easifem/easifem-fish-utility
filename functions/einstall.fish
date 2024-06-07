@@ -1,16 +1,13 @@
 function einstall -d "efficient install for easifem"
-    set currentPath ( pwd )
-
-    if not set -q EASIFEM_PYTHON_CLI
-        argparse d/download -- $argv
-        if set -ql _flag_download
-            easifem install $argv
-        else
-            # default is with no-download option
-            easifem install $argv --no-download
-        end
-        return
+    if set -q EASIFEM_PYTHON_CLI
+        _einstall_python $argv
+    else
+        _einstall_go $argv
     end
+end
+
+function _einstall_python
+    set currentPath ( pwd )
 
     argparse d/debug -- $argv
 
@@ -86,9 +83,37 @@ function einstall -d "efficient install for easifem"
             echo $branchName >$EASIFEM_INSTALL_DIR/easifem/$repoName/flag
         end
         builtin cd $currentPath
-    else
-        echo "python file is not found "
-        builtin cd $currentPath
-        return 1
+        return
     end
+    echo "python file is not found "
+    builtin cd $currentPath
+    return 1
+end
+
+function _einstall_go
+    argparse q/quiet d/download c/clean "e/env=" -- $argv
+
+    if set -ql _flag_env
+        set env --env $_flag_env
+    else
+        set env
+    end
+
+    if set -ql _flag_env
+        echo "clean before installation"
+        easifem clean $argv $env
+    end
+
+    if set -ql _flag_quiet
+        set env -q $env
+    end
+
+    if set -ql _flag_download
+        easifem install $argv $env
+    else
+        # default is with no-download option
+        easifem install $argv --no-download $env
+    end
+    return
+
 end

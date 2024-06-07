@@ -1,11 +1,14 @@
 
 function ebuild -d "efficient build for easifem"
-    set currentPath ( pwd )
-
-    if not set -q EASIFEM_PYTHON_CLI
-        easifem dev $argv
-        return
+    if set -q EASIFEM_PYTHON_CLI
+        _ebuild_python $argv
+    else
+        _ebuild_go $argv
     end
+end
+
+function _ebuild_python
+    set currentPath ( pwd )
 
     argparse d/debug -- $argv
 
@@ -25,4 +28,26 @@ function ebuild -d "efficient build for easifem"
     python3 $script
 
     builtin cd $currentPath
+end
+
+function _ebuild_go
+    argparse q/quiet d/download c/clean "e/env=" -- $argv
+
+    if set -ql _flag_env
+        set env --env $_flag_env
+    else
+        set env
+    end
+
+    if set -ql _flag_env
+        echo "clean before installation"
+        easifem clean $argv $env
+    end
+
+    if set -ql _flag_quiet
+        set env -q $env
+    end
+
+    easifem dev $argv $env
+    return
 end

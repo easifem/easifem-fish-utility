@@ -99,7 +99,7 @@ function _einstall_go
         set env
     end
 
-    if set -ql _flag_env
+    if set -ql _flag_clean
         echo "clean before installation"
         easifem clean $argv $env
     end
